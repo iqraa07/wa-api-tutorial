@@ -99,46 +99,86 @@
 
 <section id="daftar" class="section">
   <h2><span class="num">4</span> Daftar akun Meta Developer</h2>
-  <p class="lead">Langkah pertama adalah membuat akun di portal developer Meta dan membuat sebuah "App".</p>
-  <div class="steps">
-    <div class="step-item">
-      <h4>Buka portal Meta Developer</h4>
-      <p>Buka browser dan kunjungi <a href="https://developers.facebook.com" target="_blank">developers.facebook.com</a>. Klik tombol "Get Started" di pojok kanan atas halaman. Kamu akan diminta login menggunakan akun Facebook. Jika belum punya, buat akun Facebook terlebih dahulu.</p>
-    </div>
-    <div class="step-item">
-      <h4>Lengkapi registrasi developer</h4>
-      <p>Setelah login, Meta akan menampilkan wizard registrasi. Kamu perlu menyetujui Terms of Service, memverifikasi alamat email, dan memilih role sebagai "Developer". Proses ini hanya perlu dilakukan sekali.</p>
-    </div>
-    <div class="step-item">
-      <h4>Buat App baru</h4>
-      <p>Setelah registrasi selesai, kamu akan masuk ke dashboard. Lakukan langkah berikut:</p>
-      <ol>
-        <li>Klik menu <strong>My Apps</strong> di bagian atas halaman</li>
-        <li>Klik tombol <strong>Create App</strong></li>
-        <li>Di halaman "What do you want your app to do?", pilih <strong>Other</strong>, lalu klik Next</li>
-        <li>Di halaman "Select an app type", pilih <strong>Business</strong>, lalu klik Next</li>
-        <li>Isi formulir:
-          <ul>
-            <li><strong>App name</strong>: bebas, contoh "WA Bot" atau "Server Alert"</li>
-            <li><strong>App contact email</strong>: alamat email kamu</li>
-            <li><strong>Business Account</strong>: pilih yang sudah ada, atau pilih "I don't want to connect a business portfolio yet"</li>
-          </ul>
-        </li>
-        <li>Klik <strong>Create App</strong></li>
-      </ol>
-    </div>
-    <div class="step-item">
-      <h4>Buat Meta Business Account (jika diminta)</h4>
-      <p>Beberapa fitur WhatsApp API memerlukan Business Account. Jika kamu belum punya:</p>
-      <ol>
-        <li>Buka <a href="https://business.facebook.com" target="_blank">business.facebook.com</a> di tab baru</li>
-        <li>Klik <strong>Create Account</strong></li>
-        <li>Isi nama bisnis (boleh nama apapun), nama kamu, dan alamat email</li>
-        <li>Klik Submit</li>
-      </ol>
-      <p>Setelah selesai, kembali ke halaman App dan hubungkan dengan Business Account yang baru dibuat.</p>
-    </div>
+  <p class="lead">Langkah pertama adalah membuat akun di portal developer Meta dan membuat sebuah "App". Proses ini gratis dan memakan waktu sekitar 10-15 menit.</p>
+
+  <h3>4.1 — Buat akun Facebook (jika belum punya)</h3>
+  <p>Meta Developer Portal menggunakan akun Facebook untuk login. Jika kamu sudah punya akun Facebook, langsung lanjut ke langkah 4.2.</p>
+  <ol>
+    <li>Buka <a href="https://www.facebook.com/r.php" target="_blank">facebook.com/r.php</a> (halaman registrasi Facebook)</li>
+    <li>Isi nama, email atau nomor HP, password, tanggal lahir, dan gender</li>
+    <li>Klik <strong>Sign Up</strong></li>
+    <li>Verifikasi email atau nomor HP yang digunakan</li>
+  </ol>
+  <div class="callout callout-info">
+    <strong>Catatan</strong>
+    Akun Facebook ini hanya digunakan untuk login ke portal developer. Tidak akan muncul di WhatsApp Business atau di pesan yang dikirim. Bisa pakai akun Facebook pribadi yang sudah ada.
   </div>
+
+  <h3>4.2 — Daftar sebagai Meta Developer</h3>
+  <ol>
+    <li>Buka <a href="https://developers.facebook.com" target="_blank">developers.facebook.com</a></li>
+    <li>Klik tombol <strong>Get Started</strong> di pojok kanan atas</li>
+    <li>Login menggunakan akun Facebook</li>
+    <li>Akan muncul halaman "Register as a Meta Developer". Di halaman ini:
+      <ul>
+        <li>Centang kotak persetujuan <strong>Terms of Service</strong> dan <strong>Privacy Policy</strong></li>
+        <li>Klik <strong>Continue</strong></li>
+      </ul>
+    </li>
+    <li>Verifikasi alamat email: Meta akan mengirim email verifikasi. Buka inbox, klik link konfirmasi</li>
+    <li>Setelah email terverifikasi, kamu resmi menjadi Meta Developer</li>
+  </ol>
+  <p>Proses registrasi ini hanya dilakukan satu kali. Setelah ini kamu bisa langsung membuat App.</p>
+
+  <h3>4.3 — Buat Meta Business Account</h3>
+  <p>WhatsApp Business API memerlukan Meta Business Account (sebelumnya disebut Facebook Business Manager). Ini berbeda dengan akun Facebook biasa.</p>
+  <ol>
+    <li>Buka <a href="https://business.facebook.com/overview" target="_blank">business.facebook.com/overview</a></li>
+    <li>Jika belum punya Business Account, klik <strong>Create Account</strong></li>
+    <li>Isi formulir:
+      <ul>
+        <li><strong>Business name</strong>: nama bisnis atau organisasi kamu (contoh: "PT Pertamina Patra Niaga", atau nama apapun)</li>
+        <li><strong>Your name</strong>: nama lengkap kamu</li>
+        <li><strong>Business email</strong>: email kerja atau email aktif</li>
+      </ul>
+    </li>
+    <li>Klik <strong>Submit</strong></li>
+    <li>Meta mungkin meminta verifikasi tambahan via email. Ikuti instruksinya</li>
+  </ol>
+  <div class="callout callout-warn">
+    <strong>Nama bisnis penting</strong>
+    Nama bisnis yang kamu masukkan akan muncul sebagai identitas di WhatsApp Business. Pilih nama yang profesional karena bisa dilihat oleh penerima pesan. Nama ini bisa diubah nanti, tapi prosesnya memerlukan review dari Meta.
+  </div>
+
+  <h3>4.4 — Buat App baru di Meta Developer</h3>
+  <p>App adalah "wadah" yang menampung konfigurasi WhatsApp API kamu. Satu App bisa dipakai untuk satu atau beberapa nomor WhatsApp.</p>
+  <ol>
+    <li>Buka <a href="https://developers.facebook.com/apps/" target="_blank">developers.facebook.com/apps</a></li>
+    <li>Klik tombol hijau <strong>Create App</strong> di pojok kanan atas</li>
+    <li>Halaman pertama — "Add a use case":
+      <ul>
+        <li>Pilih <strong>Other</strong></li>
+        <li>Klik <strong>Next</strong></li>
+      </ul>
+    </li>
+    <li>Halaman kedua — "Select an app type":
+      <ul>
+        <li>Pilih <strong>Business</strong></li>
+        <li>Klik <strong>Next</strong></li>
+      </ul>
+    </li>
+    <li>Halaman ketiga — "Provide basic information":
+      <ul>
+        <li><strong>Add an app name</strong>: beri nama bebas, contoh: <code>WA Alert Bot</code>, <code>Server Monitor</code>, atau <code>Zabbix Notifier</code></li>
+        <li><strong>App contact email</strong>: email yang aktif. Meta akan mengirim notifikasi penting ke email ini</li>
+        <li><strong>Business portfolio</strong>: pilih Business Account yang sudah dibuat di langkah 4.3. Jika tidak muncul, pilih <strong>"I don't want to connect a business portfolio yet"</strong></li>
+      </ul>
+    </li>
+    <li>Klik <strong>Create App</strong></li>
+    <li>Meta mungkin meminta kamu memasukkan password Facebook untuk konfirmasi keamanan</li>
+    <li>Setelah berhasil, kamu akan diarahkan ke halaman dashboard App</li>
+  </ol>
+  <p>Sampai di sini kamu sudah punya App. Langkah selanjutnya adalah menambahkan WhatsApp sebagai produk di dalam App ini (Step 5).</p>
 </section>
 
 <section id="setup" class="section">
