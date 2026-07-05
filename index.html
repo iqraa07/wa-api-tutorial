@@ -3,292 +3,225 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tutorial WhatsApp Business API - Dari Nol Sampai Bisa Kirim Pesan</title>
-  <meta name="description" content="Panduan lengkap setup WhatsApp Business API resmi dari Meta. Gratis 1000 pesan/bulan.">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <title>WhatsApp Business API — Panduan Setup Lengkap</title>
+  <meta name="description" content="Panduan lengkap setup WhatsApp Business API resmi dari Meta. Gratis 1000 pesan per bulan.">
+  <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" type="image/svg+xml">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- Hero -->
-  <header class="hero">
-    <div class="container">
-      <div class="badge">📱 Tutorial Lengkap</div>
-      <h1>WhatsApp Business API</h1>
-      <p class="subtitle">Panduan dari nol sampai berhasil kirim pesan otomatis.<br>Resmi dari Meta. <strong>Gratis 1000 pesan/bulan.</strong></p>
-      <div class="hero-cards">
-        <div class="hero-card">
-          <span class="hero-icon">✅</span>
-          <span>Resmi & Legal</span>
+
+<div class="topbar">
+  <div class="container">
+    <div class="topbar-brand">WA Business API Docs</div>
+    <div class="topbar-links">
+      <a href="#mulai">Mulai</a>
+      <a href="#template">Template</a>
+      <a href="#test">Testing</a>
+      <a href="#nodejs">Node.js</a>
+      <a href="https://developers.facebook.com/docs/whatsapp/cloud-api" target="_blank">Meta Docs &nearr;</a>
+    </div>
+  </div>
+</div>
+
+<header class="hero">
+  <div class="container">
+    <div class="hero-label">Panduan Lengkap</div>
+    <h1>Setup WhatsApp Business API<br>dari Nol Sampai Berhasil</h1>
+    <p>Langkah demi langkah mendaftar, konfigurasi, dan mengirim pesan pertama menggunakan WhatsApp Cloud API resmi dari Meta.</p>
+    <div class="hero-pills">
+      <span class="hero-pill">Resmi dari Meta</span>
+      <span class="hero-pill">1000 pesan gratis/bulan</span>
+      <span class="hero-pill">Tanpa risiko banned</span>
+    </div>
+  </div>
+</header>
+
+<nav class="toc">
+  <div class="container">
+    <h2>Daftar Isi</h2>
+    <ol>
+      <li><a href="#tentang">Apa itu WA Business API</a></li>
+      <li><a href="#harga">Apakah gratis?</a></li>
+      <li><a href="#mulai">Daftar akun Meta Developer</a></li>
+      <li><a href="#setup">Setup WhatsApp di dashboard</a></li>
+      <li><a href="#template">Buat message template</a></li>
+      <li><a href="#test">Kirim pesan pertama</a></li>
+      <li><a href="#nodejs">Kirim via Node.js</a></li>
+      <li><a href="#token-permanen">Buat token permanen</a></li>
+      <li><a href="#errors">Troubleshooting</a></li>
+    </ol>
+  </div>
+</nav>
+
+<main class="container">
+
+  <!-- 1 -->
+  <section id="tentang" class="section">
+    <h2><span class="num">1</span> Apa itu WhatsApp Business API</h2>
+    <p class="lead">Layanan resmi dari Meta untuk mengirim pesan WhatsApp secara otomatis melalui kode program.</p>
+
+    <div class="vs-grid">
+      <div class="vs-card vs-bad">
+        <h4>Library Tidak Resmi (Baileys dll)</h4>
+        <ul>
+          <li>Bisa dibanned kapan saja</li>
+          <li>Perlu scan QR berulang</li>
+          <li>Sesi sering disconnect</li>
+          <li>Tidak ada support</li>
+        </ul>
+      </div>
+      <div class="vs-card vs-good">
+        <h4>WhatsApp Business API (Resmi)</h4>
+        <ul>
+          <li>Tidak bisa dibanned</li>
+          <li>Login pakai token, tanpa QR</li>
+          <li>99.9% uptime</li>
+          <li>Dokumentasi lengkap dari Meta</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout callout-info">
+      <strong>Keterbatasan</strong>
+      WA Business API hanya bisa kirim pesan personal (1-on-1). Tidak bisa kirim ke grup dan tidak bisa tag all.
+    </div>
+  </section>
+
+  <!-- 2 -->
+  <section id="harga" class="section">
+    <h2><span class="num">2</span> Apakah gratis?</h2>
+    <p class="lead">Ya. Meta memberikan kuota gratis 1000 pesan per bulan untuk kategori utility.</p>
+
+    <div class="price-box">
+      <div class="big">1,000 pesan gratis / bulan</div>
+      <div class="sub">Tanpa kartu kredit. Otomatis reset setiap bulan.</div>
+    </div>
+
+    <table>
+      <thead><tr><th>Kategori</th><th>Harga</th><th>Keterangan</th></tr></thead>
+      <tbody>
+        <tr class="row-free"><td>Free tier</td><td>Rp 0</td><td>1000 pesan utility per bulan</td></tr>
+        <tr><td>Utility (lebih dari 1000)</td><td>~Rp 320/pesan</td><td>Notifikasi, alert, OTP</td></tr>
+        <tr><td>Marketing</td><td>~Rp 800/pesan</td><td>Promosi, campaign</td></tr>
+        <tr><td>Reply dalam 24 jam</td><td>Gratis</td><td>Membalas pesan user</td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout callout-success">
+      <strong>Contoh perhitungan</strong>
+      5 alert/hari &times; 3 penerima &times; 30 hari = 450 pesan/bulan. Masih dalam kuota gratis.
+    </div>
+  </section>
+
+  <!-- 3 -->
+  <section id="mulai" class="section">
+    <h2><span class="num">3</span> Daftar akun Meta Developer</h2>
+    <p class="lead">Langkah pertama adalah membuat akun developer dan app di Meta.</p>
+
+    <div class="steps">
+      <div class="step-item">
+        <h4>Buka Meta for Developers</h4>
+        <p>Kunjungi <a href="https://developers.facebook.com" target="_blank">developers.facebook.com</a> dan login menggunakan akun Facebook.</p>
+      </div>
+      <div class="step-item">
+        <h4>Buat App Baru</h4>
+        <p>Klik <strong>My Apps</strong> &rarr; <strong>Create App</strong> &rarr; pilih <strong>Other</strong> &rarr; pilih <strong>Business</strong>.</p>
+        <p>Isi nama app (contoh: <code>WA Alert Bot</code>), email, lalu klik Create App.</p>
+      </div>
+      <div class="step-item">
+        <h4>Buat Meta Business Account</h4>
+        <p>Jika belum punya, buka <a href="https://business.facebook.com" target="_blank">business.facebook.com</a> &rarr; Create Account. Isi nama bisnis, nama kamu, dan email.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 -->
+  <section id="setup" class="section">
+    <h2><span class="num">4</span> Setup WhatsApp di dashboard</h2>
+    <p class="lead">Tambahkan WhatsApp sebagai produk di app kamu dan catat credentials.</p>
+
+    <div class="steps">
+      <div class="step-item">
+        <h4>Tambahkan WhatsApp Product</h4>
+        <p>Di dashboard app, scroll ke bawah, cari <strong>WhatsApp</strong>, klik <strong>Set Up</strong>. Pilih Business Account &rarr; Continue.</p>
+      </div>
+      <div class="step-item">
+        <h4>Catat 3 info penting</h4>
+        <p>Di halaman <strong>API Setup</strong>, catat:</p>
+        <div class="codeblock">
+          <div class="codeblock-header">Credentials</div>
+          <pre><code>Phone Number ID : 123456789012345
+WABA ID         : 987654321098765
+Access Token    : EAAGk0B3a...  (berlaku 24 jam)</code></pre>
         </div>
-        <div class="hero-card">
-          <span class="hero-icon">🆓</span>
-          <span>1000 Gratis/Bulan</span>
-        </div>
-        <div class="hero-card">
-          <span class="hero-icon">🔒</span>
-          <span>Anti Banned</span>
-        </div>
-        <div class="hero-card">
-          <span class="hero-icon">⚡</span>
-          <span>99.9% Uptime</span>
+      </div>
+      <div class="step-item">
+        <h4>Daftarkan nomor penerima</h4>
+        <p>Selama test mode, kamu hanya bisa kirim ke nomor yang terdaftar:</p>
+        <ol>
+          <li>Di API Setup, klik <strong>Manage phone number list</strong></li>
+          <li>Klik <strong>Add phone number</strong></li>
+          <li>Masukkan nomor WA penerima: <code>6281234567890</code></li>
+          <li>Penerima memasukkan kode verifikasi yang diterima</li>
+        </ol>
+        <div class="callout callout-warn">
+          <strong>Format nomor</strong>
+          Gunakan kode negara tanpa tanda plus. Contoh: <code>6281234567890</code> bukan <code>+6281234567890</code> atau <code>081234567890</code>.
         </div>
       </div>
     </div>
-  </header>
+  </section>
 
-  <!-- TOC -->
-  <nav class="toc">
-    <div class="container">
-      <h2>📋 Daftar Isi</h2>
-      <div class="toc-grid">
-        <a href="#apa-itu" class="toc-item"><span class="toc-num">1</span> Apa itu WA Business API?</a>
-        <a href="#gratis" class="toc-item"><span class="toc-num">2</span> Apakah Gratis?</a>
-        <a href="#daftar" class="toc-item"><span class="toc-num">3</span> Daftar Akun Meta Developer</a>
-        <a href="#setup-wa" class="toc-item"><span class="toc-num">4</span> Setup WhatsApp Product</a>
-        <a href="#template" class="toc-item"><span class="toc-num">5</span> Buat Message Template</a>
-        <a href="#test-kirim" class="toc-item"><span class="toc-num">6</span> Test Kirim Pesan Pertama</a>
-        <a href="#nodejs" class="toc-item"><span class="toc-num">7</span> Kirim via Node.js</a>
-        <a href="#token" class="toc-item"><span class="toc-num">8</span> Buat Token Permanen</a>
-        <a href="#troubleshoot" class="toc-item"><span class="toc-num">9</span> Troubleshooting</a>
-      </div>
+  <!-- 5 -->
+  <section id="template" class="section">
+    <h2><span class="num">5</span> Buat message template</h2>
+    <p class="lead">Pesan harus dikirim dalam format template yang sudah di-approve Meta.</p>
+
+    <div class="callout callout-success">
+      <strong>Kabar baik</strong>
+      Meta sudah menyediakan template bawaan <code>hello_world</code> yang langsung bisa dipakai untuk testing. Kamu bisa langsung ke Step 6.
     </div>
-  </nav>
 
-  <main class="container">
+    <h3>Membuat template custom (opsional)</h3>
+    <ol>
+      <li>Buka <strong>WhatsApp Manager</strong> &rarr; <strong>Message Templates</strong></li>
+      <li>Klik <strong>Create Template</strong></li>
+      <li>Pilih kategori <strong>Utility</strong>, beri nama, pilih bahasa Indonesian</li>
+      <li>Tulis body template. Gunakan <code>{{1}}</code>, <code>{{2}}</code> dst sebagai variabel</li>
+      <li>Submit dan tunggu approval (biasanya beberapa menit sampai 24 jam)</li>
+    </ol>
 
-    <!-- Section 1 -->
-    <section id="apa-itu" class="section">
-      <div class="section-header"><span class="step-badge">Step 1</span><h2>Apa itu WhatsApp Business API?</h2></div>
-      <p>WhatsApp Business API adalah layanan <strong>resmi dari Meta (Facebook)</strong> yang memungkinkan kamu mengirim pesan otomatis via WhatsApp menggunakan kode program (API).</p>
-      
-      <div class="comparison">
-        <div class="compare-card compare-old">
-          <h3>❌ Cara Lama (Baileys/Unofficial)</h3>
-          <ul>
-            <li>Library tidak resmi</li>
-            <li>Rawan <strong>banned</strong> oleh WhatsApp</li>
-            <li>Perlu scan QR berulang</li>
-            <li>Sesi sering putus</li>
-            <li>Tidak ada support resmi</li>
-          </ul>
-        </div>
-        <div class="compare-card compare-new">
-          <h3>✅ Cara Baru (WA Business API)</h3>
-          <ul>
-            <li><strong>Resmi</strong> dari Meta</li>
-            <li><strong>Tidak bisa dibanned</strong></li>
-            <li>Token-based, tidak perlu QR</li>
-            <li>99.9% uptime stabil</li>
-            <li>Dokumentasi & support lengkap</li>
-          </ul>
-        </div>
-      </div>
+    <h4>Contoh template:</h4>
+    <div class="codeblock">
+      <div class="codeblock-header">server_alert (Utility)</div>
+      <pre><code>{{1}} Alert
+Server: {{2}}
+Masalah: {{3}}
+Level: {{4}}
+Waktu: {{5}}</code></pre>
+    </div>
+  </section>
 
-      <div class="alert alert-info">
-        <strong>⚠️ Keterbatasan:</strong> WA Business API <strong>tidak bisa kirim ke grup</strong> dan <strong>tidak bisa tag all</strong>. Hanya personal chat (1-on-1) via template yang sudah di-approve Meta.
-      </div>
-    </section>
+  <!-- 6 -->
+  <section id="test" class="section">
+    <h2><span class="num">6</span> Kirim pesan pertama</h2>
+    <p class="lead">Sekarang saatnya test. Ada 2 cara: via dashboard atau via command line.</p>
 
-    <!-- Section 2 -->
-    <section id="gratis" class="section">
-      <div class="section-header"><span class="step-badge">Step 2</span><h2>Apakah Gratis?</h2></div>
-      
-      <div class="pricing-highlight">
-        <div class="price-big">🆓 1,000 Pesan GRATIS</div>
-        <div class="price-sub">per bulan, setiap bulan, tanpa kartu kredit</div>
-      </div>
+    <h3>Cara 1: Via Dashboard (paling mudah)</h3>
+    <ol>
+      <li>Di <strong>WhatsApp</strong> &rarr; <strong>API Setup</strong></li>
+      <li>Pilih nomor pengirim (From) dan nomor penerima (To)</li>
+      <li>Klik <strong>Send Message</strong></li>
+      <li>Cek HP penerima &mdash; pesan "Hello World" masuk</li>
+    </ol>
 
-      <table class="styled-table">
-        <thead>
-          <tr><th>Kategori</th><th>Harga/Pesan</th><th>Keterangan</th></tr>
-        </thead>
-        <tbody>
-          <tr class="row-free"><td><strong>Free Tier</strong></td><td><strong>Rp 0 (GRATIS)</strong></td><td>1,000 pesan utility/bulan</td></tr>
-          <tr><td>Utility</td><td>~Rp 320</td><td>Notifikasi, alert, OTP</td></tr>
-          <tr><td>Marketing</td><td>~Rp 800</td><td>Promosi, campaign</td></tr>
-          <tr><td>Reply (24 jam)</td><td><strong>Gratis</strong></td><td>Balas pesan user dalam 24 jam</td></tr>
-        </tbody>
-      </table>
+    <h3>Cara 2: Via cURL</h3>
+    <p>Ganti <code>PHONE_NUMBER_ID</code> dan <code>ACCESS_TOKEN</code> dengan milik kamu.</p>
 
-      <div class="alert alert-success">
-        <strong>💡 Contoh perhitungan:</strong> Kirim 5 alert/hari × 3 penerima × 30 hari = <strong>450 pesan/bulan</strong> → Masih <strong>GRATIS</strong>!
-      </div>
-    </section>
-
-    <!-- Section 3 -->
-    <section id="daftar" class="section">
-      <div class="section-header"><span class="step-badge">Step 3</span><h2>Daftar Akun Meta Developer</h2></div>
-      
-      <div class="step-list">
-        <div class="step-item">
-          <div class="step-num">3.1</div>
-          <div class="step-content">
-            <h3>Buka Meta for Developers</h3>
-            <p>Kunjungi <a href="https://developers.facebook.com" target="_blank">developers.facebook.com</a> → klik <strong>"Get Started"</strong></p>
-            <p>Login menggunakan akun Facebook kamu.</p>
-          </div>
-        </div>
-        
-        <div class="step-item">
-          <div class="step-num">3.2</div>
-          <div class="step-content">
-            <h3>Buat App Baru</h3>
-            <ol>
-              <li>Klik <strong>"My Apps"</strong> → <strong>"Create App"</strong></li>
-              <li>Pilih use case: <strong>"Other"</strong> → Next</li>
-              <li>Pilih app type: <strong>"Business"</strong> → Next</li>
-              <li>Isi nama app: <code>WA Alert Bot</code> (bebas)</li>
-              <li>Isi email kontak</li>
-              <li>Business Account: pilih yang ada atau skip dulu</li>
-              <li>Klik <strong>"Create App"</strong></li>
-            </ol>
-          </div>
-        </div>
-
-        <div class="step-item">
-          <div class="step-num">3.3</div>
-          <div class="step-content">
-            <h3>Buat Meta Business Account (jika belum)</h3>
-            <ol>
-              <li>Buka <a href="https://business.facebook.com" target="_blank">business.facebook.com</a></li>
-              <li>Klik <strong>"Create Account"</strong></li>
-              <li>Isi nama bisnis, nama kamu, email</li>
-              <li>Klik <strong>"Submit"</strong></li>
-            </ol>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Section 4 -->
-    <section id="setup-wa" class="section">
-      <div class="section-header"><span class="step-badge">Step 4</span><h2>Setup WhatsApp Product</h2></div>
-
-      <div class="step-list">
-        <div class="step-item">
-          <div class="step-num">4.1</div>
-          <div class="step-content">
-            <h3>Tambahkan WhatsApp ke App</h3>
-            <ol>
-              <li>Di dashboard app, scroll ke bawah</li>
-              <li>Cari produk <strong>"WhatsApp"</strong></li>
-              <li>Klik <strong>"Set Up"</strong></li>
-              <li>Pilih Meta Business Account → <strong>Continue</strong></li>
-            </ol>
-          </div>
-        </div>
-
-        <div class="step-item">
-          <div class="step-num">4.2</div>
-          <div class="step-content">
-            <h3>Catat Credentials</h3>
-            <p>Setelah setup, akan muncul halaman <strong>"API Setup"</strong> dengan info penting:</p>
-            <div class="code-block">
-              <div class="code-header">📋 Catat info ini:</div>
-              <pre><code>Phone Number ID  : 123456789012345      ← untuk kirim pesan
-WABA ID          : 987654321098765      ← untuk management
-Access Token     : EAAGk0B3a...         ← untuk auth (sementara 24 jam)</code></pre>
-            </div>
-            <div class="alert alert-warn"><strong>⚠️</strong> Token dari halaman ini hanya berlaku <strong>24 jam</strong>. Kita akan buat token permanen di Step 8.</div>
-          </div>
-        </div>
-
-        <div class="step-item">
-          <div class="step-num">4.3</div>
-          <div class="step-content">
-            <h3>Daftarkan Nomor Penerima (Test Mode)</h3>
-            <p>Selama masih test mode, kamu hanya bisa kirim ke nomor yang sudah didaftarkan:</p>
-            <ol>
-              <li>Di halaman <strong>API Setup</strong>, cari bagian <strong>"To"</strong></li>
-              <li>Klik <strong>"Manage phone number list"</strong></li>
-              <li>Klik <strong>"Add phone number"</strong></li>
-              <li>Masukkan nomor WA penerima: <code>6281234567890</code></li>
-              <li>Penerima akan dapat kode verifikasi → masukkan kode</li>
-            </ol>
-            <div class="alert alert-info"><strong>📝</strong> Format nomor: <code>628xxx</code> (pakai kode negara 62, tanpa + atau 0)</div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Section 5 -->
-    <section id="template" class="section">
-      <div class="section-header"><span class="step-badge">Step 5</span><h2>Buat Message Template</h2></div>
-      
-      <p>WhatsApp Business API mengharuskan pesan dikirim dalam format <strong>template</strong> yang sudah di-approve Meta. Ini untuk mencegah spam.</p>
-
-      <div class="alert alert-success"><strong>🎉 Kabar baik:</strong> Meta sudah sediakan template bawaan <code>hello_world</code> yang langsung bisa dipakai untuk testing!</div>
-
-      <div class="step-list">
-        <div class="step-item">
-          <div class="step-num">5.1</div>
-          <div class="step-content">
-            <h3>Buat Template Custom (Opsional)</h3>
-            <p>Jika ingin template sendiri:</p>
-            <ol>
-              <li>Buka <strong>WhatsApp Manager</strong> → <strong>Message Templates</strong></li>
-              <li>Atau: <a href="https://business.facebook.com/wa/manage/message-templates/" target="_blank">Buka langsung</a></li>
-              <li>Klik <strong>"Create Template"</strong></li>
-            </ol>
-          </div>
-        </div>
-
-        <div class="step-item">
-          <div class="step-num">5.2</div>
-          <div class="step-content">
-            <h3>Contoh Template Alert</h3>
-            <div class="code-block">
-              <div class="code-header">Template: server_alert</div>
-              <pre><code>Category : Utility
-Name     : server_alert
-Language : Indonesian (id)
-
-Body:
-🚨 *{{1}} Alert*
-━━━━━━━━━━━━━━━━━━━━
-🖥️ Server: {{2}}
-⚠️ Masalah: {{3}}
-📊 Level: {{4}}
-🕐 Waktu: {{5}}
-━━━━━━━━━━━━━━━━━━━━
-Monitoring System - Automated Alert</code></pre>
-            </div>
-            <p><code>{{1}}</code> sampai <code>{{5}}</code> adalah variabel yang diisi saat kirim pesan.</p>
-          </div>
-        </div>
-
-        <div class="step-item">
-          <div class="step-num">5.3</div>
-          <div class="step-content">
-            <h3>Submit & Tunggu Approval</h3>
-            <ul>
-              <li>Klik <strong>"Submit"</strong></li>
-              <li>Status: <span class="badge-pending">Pending</span> → biasanya approve dalam <strong>1 menit - 24 jam</strong></li>
-              <li>Setelah <span class="badge-approved">Approved</span> → siap dipakai!</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Section 6 -->
-    <section id="test-kirim" class="section">
-      <div class="section-header"><span class="step-badge">Step 6</span><h2>Test Kirim Pesan Pertama! 🎉</h2></div>
-
-      <h3>Opsi A: Kirim via Dashboard (Paling Gampang)</h3>
-      <ol>
-        <li>Di <strong>WhatsApp</strong> → <strong>API Setup</strong></li>
-        <li>Pilih <strong>From</strong>: nomor test kamu</li>
-        <li>Pilih <strong>To</strong>: nomor penerima yang sudah terdaftar</li>
-        <li>Klik <strong>"Send Message"</strong></li>
-        <li><strong>Cek HP penerima</strong> → pesan "Hello World" masuk! ✅</li>
-      </ol>
-
-      <h3>Opsi B: Kirim via cURL (Command Line)</h3>
-      
-      <div class="code-block">
-        <div class="code-header">🐧 Linux / Mac (Terminal)</div>
-        <pre><code>curl -X POST "https://graph.facebook.com/v21.0/PHONE_NUMBER_ID/messages" \
+    <div class="codeblock">
+      <div class="codeblock-header">Linux / Mac</div>
+      <pre><code>curl -X POST \
+  "https://graph.facebook.com/v21.0/PHONE_NUMBER_ID/messages" \
   -H "Authorization: Bearer ACCESS_TOKEN" \
   -H "Content-Type: application/json" \
   -d '{
@@ -300,96 +233,57 @@ Monitoring System - Automated Alert</code></pre>
       "language": { "code": "en_US" }
     }
   }'</code></pre>
-      </div>
+    </div>
 
-      <div class="code-block">
-        <div class="code-header">🪟 Windows PowerShell</div>
-        <pre><code>$headers = @{
-  "Authorization" = "Bearer PASTE_TOKEN_DISINI"
-  "Content-Type"  = "application/json"
-}
-$body = @{
-  messaging_product = "whatsapp"
-  to = "6281234567890"
-  type = "template"
-  template = @{
-    name = "hello_world"
-    language = @{ code = "en_US" }
-  }
-} | ConvertTo-Json -Depth 5
-
-Invoke-RestMethod `
-  -Uri "https://graph.facebook.com/v21.0/PHONE_NUMBER_ID/messages" `
-  -Method POST -Headers $headers -Body $body</code></pre>
-      </div>
-
-      <p>Ganti <code>PHONE_NUMBER_ID</code> dan <code>ACCESS_TOKEN</code> dengan milik kamu dari Step 4.2.</p>
-
-      <div class="code-block">
-        <div class="code-header">✅ Response Sukses:</div>
-        <pre><code>{
+    <h4>Response sukses:</h4>
+    <div class="codeblock">
+      <div class="codeblock-header">JSON Response</div>
+      <pre><code>{
   "messaging_product": "whatsapp",
   "contacts": [{ "wa_id": "6281234567890" }],
   "messages": [{ "id": "wamid.HBgN..." }]
 }</code></pre>
-      </div>
+    </div>
+    <p>Jika muncul field <code>messages</code> dengan <code>id</code>, berarti pesan berhasil terkirim. Cek HP penerima.</p>
+  </section>
 
-      <div class="alert alert-success"><strong>🎉 Selamat!</strong> Kalau response menunjukkan <code>messages</code> dengan <code>id</code>, berarti pesan berhasil terkirim! Cek HP penerima.</div>
-    </section>
+  <!-- 7 -->
+  <section id="nodejs" class="section">
+    <h2><span class="num">7</span> Kirim via Node.js</h2>
+    <p class="lead">Untuk otomasi, kirim pesan menggunakan Node.js.</p>
 
-    <!-- Section 7 -->
-    <section id="nodejs" class="section">
-      <div class="section-header"><span class="step-badge">Step 7</span><h2>Kirim via Node.js</h2></div>
-
-      <div class="step-list">
-        <div class="step-item">
-          <div class="step-num">7.1</div>
-          <div class="step-content">
-            <h3>Buat Project</h3>
-            <div class="code-block">
-              <div class="code-header">Terminal</div>
-              <pre><code>mkdir wa-bot
-cd wa-bot
+    <h3>Setup project</h3>
+    <div class="codeblock">
+      <div class="codeblock-header">Terminal</div>
+      <pre><code>mkdir wa-bot &amp;&amp; cd wa-bot
 npm init -y
 npm install dotenv</code></pre>
-            </div>
-          </div>
-        </div>
+    </div>
 
-        <div class="step-item">
-          <div class="step-num">7.2</div>
-          <div class="step-content">
-            <h3>Buat file <code>.env</code></h3>
-            <div class="code-block">
-              <div class="code-header">.env</div>
-              <pre><code>WA_PHONE_NUMBER_ID=123456789012345
-WA_ACCESS_TOKEN=EAAGk0B3axxxxxxxxxx
-WA_API_VERSION=v21.0</code></pre>
-            </div>
-          </div>
-        </div>
+    <h3>File .env</h3>
+    <div class="codeblock">
+      <div class="codeblock-header">.env</div>
+      <pre><code>WA_PHONE_NUMBER_ID=123456789012345
+WA_ACCESS_TOKEN=EAAGk0B3axxxxxxxxxx</code></pre>
+    </div>
 
-        <div class="step-item">
-          <div class="step-num">7.3</div>
-          <div class="step-content">
-            <h3>Buat file <code>send.js</code></h3>
-            <div class="code-block">
-              <div class="code-header">send.js — Kirim pesan pertama via Node.js</div>
-              <pre><code>require('dotenv').config();
+    <h3>File send.js</h3>
+    <div class="codeblock">
+      <div class="codeblock-header">send.js</div>
+      <pre><code>require('dotenv').config();
 const https = require('https');
 
 const PHONE_ID = process.env.WA_PHONE_NUMBER_ID;
-const TOKEN    = process.env.WA_ACCESS_TOKEN;
-const VERSION  = process.env.WA_API_VERSION || 'v21.0';
+const TOKEN = process.env.WA_ACCESS_TOKEN;
 
-function kirimPesan(nomorTujuan, templateName, params = [], lang = 'en_US') {
+function kirim(nomor, template, params = [], lang = 'en_US') {
   return new Promise((resolve, reject) =&gt; {
     const body = JSON.stringify({
       messaging_product: 'whatsapp',
-      to: nomorTujuan,
+      to: nomor,
       type: 'template',
       template: {
-        name: templateName,
+        name: template,
         language: { code: lang },
         components: params.length ? [{
           type: 'body',
@@ -400,23 +294,22 @@ function kirimPesan(nomorTujuan, templateName, params = [], lang = 'en_US') {
 
     const req = https.request({
       hostname: 'graph.facebook.com',
-      path: `/${VERSION}/${PHONE_ID}/messages`,
+      path: '/v21.0/' + PHONE_ID + '/messages',
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${TOKEN}`,
+        'Authorization': 'Bearer ' + TOKEN,
         'Content-Type': 'application/json'
       }
-    }, (res) =&gt; {
+    }, res =&gt; {
       let data = '';
       res.on('data', c =&gt; data += c);
       res.on('end', () =&gt; {
         const json = JSON.parse(data);
         if (res.statusCode === 200) {
-          console.log('✅ Pesan terkirim!');
-          console.log('   Message ID:', json.messages?.[0]?.id);
+          console.log('Pesan terkirim! ID:', json.messages[0].id);
           resolve(json);
         } else {
-          console.error('❌ Gagal:', json.error?.message);
+          console.error('Gagal:', json.error?.message);
           reject(new Error(json.error?.message));
         }
       });
@@ -427,109 +320,95 @@ function kirimPesan(nomorTujuan, templateName, params = [], lang = 'en_US') {
   });
 }
 
-// ═══ JALANKAN ═══
-async function main() {
-  console.log('🚀 Mengirim pesan via WA Business API...\n');
-
-  // Ganti nomor ini dengan nomor tujuan kamu
-  await kirimPesan('6281234567890', 'hello_world');
-}
-
-main().catch(console.error);</code></pre>
-            </div>
-          </div>
-        </div>
-
-        <div class="step-item">
-          <div class="step-num">7.4</div>
-          <div class="step-content">
-            <h3>Jalankan!</h3>
-            <div class="code-block">
-              <div class="code-header">Terminal</div>
-              <pre><code>node send.js</code></pre>
-            </div>
-            <div class="code-block">
-              <div class="code-header">Output yang diharapkan:</div>
-              <pre><code>🚀 Mengirim pesan via WA Business API...
-
-✅ Pesan terkirim!
-   Message ID: wamid.HBgNNjI4MTM0MjMzMTIyMxUCABI...</code></pre>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Section 8 -->
-    <section id="token" class="section">
-      <div class="section-header"><span class="step-badge">Step 8</span><h2>Buat Token Permanen</h2></div>
-      <p>Token dari dashboard hanya <strong>24 jam</strong>. Untuk production, buat System User Token yang <strong>tidak pernah expire</strong>:</p>
-      <ol>
-        <li>Buka <a href="https://business.facebook.com/settings/system-users" target="_blank">business.facebook.com/settings/system-users</a></li>
-        <li>Klik <strong>"Add"</strong> → nama: <code>wa-bot</code>, role: <strong>Admin</strong></li>
-        <li>Klik user → <strong>"Add Assets"</strong> → pilih Apps → centang app WA → <strong>Full Control</strong></li>
-        <li>Klik <strong>"Generate New Token"</strong></li>
-        <li>Pilih app → centang: <code>whatsapp_business_messaging</code> + <code>whatsapp_business_management</code></li>
-        <li>Klik <strong>"Generate Token"</strong> → <strong>COPY & SIMPAN!</strong></li>
-        <li>Update <code>.env</code> dengan token baru</li>
-      </ol>
-      <div class="alert alert-warn"><strong>🔐 RAHASIA!</strong> Token ini seperti password. Jangan share atau commit ke GitHub.</div>
-    </section>
-
-    <!-- Section 9 -->
-    <section id="troubleshoot" class="section">
-      <div class="section-header"><span class="step-badge">Step 9</span><h2>Troubleshooting</h2></div>
-      <table class="styled-table">
-        <thead><tr><th>Error</th><th>Penyebab</th><th>Solusi</th></tr></thead>
-        <tbody>
-          <tr><td><code>Recipient not in allowed list</code></td><td>Nomor belum terdaftar (test mode)</td><td>Tambahkan nomor di API Setup</td></tr>
-          <tr><td><code>Template not found</code></td><td>Template belum di-approve</td><td>Cek status di Message Templates</td></tr>
-          <tr><td><code>Access token expired</code></td><td>Token sementara (24 jam)</td><td>Buat permanent token (Step 8)</td></tr>
-          <tr><td><code>Invalid parameter</code></td><td>Format nomor salah</td><td>Pakai <code>628xxx</code> tanpa + atau 0</td></tr>
-          <tr><td><code>Message undeliverable</code></td><td>Nomor tidak punya WA</td><td>Pastikan nomor aktif di WhatsApp</td></tr>
-        </tbody>
-      </table>
-
-      <h3>Format Nomor yang Benar</h3>
-      <div class="code-block">
-        <pre><code>✅ Benar: 6281234567890   (kode negara 62 + nomor)
-❌ Salah: +6281234567890  (jangan pakai +)
-❌ Salah: 081234567890    (jangan pakai 0 di depan)
-❌ Salah: 81234567890     (harus ada kode negara)</code></pre>
-      </div>
-    </section>
-
-    <!-- Summary -->
-    <section class="section summary-section">
-      <h2>🎯 Ringkasan</h2>
-      <div class="summary-grid">
-        <div class="summary-item done">1. Daftar di developers.facebook.com</div>
-        <div class="summary-item done">2. Buat App → tambahkan WhatsApp</div>
-        <div class="summary-item done">3. Catat Phone Number ID + Token</div>
-        <div class="summary-item done">4. Daftarkan nomor penerima</div>
-        <div class="summary-item done">5. Test kirim via Dashboard / cURL</div>
-        <div class="summary-item done">6. Buat project Node.js + send.js</div>
-        <div class="summary-item done">7. Jalankan <code>node send.js</code> → Pesan masuk!</div>
-        <div class="summary-item done">8. Buat permanent token untuk production</div>
-      </div>
-    </section>
-
-    <!-- Links -->
-    <section class="section">
-      <h2>📚 Referensi Resmi</h2>
-      <ul>
-        <li><a href="https://developers.facebook.com/docs/whatsapp/cloud-api" target="_blank">Meta Cloud API Docs</a></li>
-        <li><a href="https://developers.facebook.com/docs/whatsapp/cloud-api/reference" target="_blank">API Reference</a></li>
-        <li><a href="https://developers.facebook.com/docs/whatsapp/business-management-api/message-templates" target="_blank">Message Templates</a></li>
-        <li><a href="https://developers.facebook.com/docs/whatsapp/pricing" target="_blank">Pricing</a></li>
-      </ul>
-    </section>
-  </main>
-
-  <footer>
-    <div class="container">
-      <p>Tutorial by Antigravity AI • Juli 2026 • API Version v21.0</p>
+// Ganti nomor di bawah dengan nomor tujuan
+kirim('6281234567890', 'hello_world');</code></pre>
     </div>
-  </footer>
+
+    <h3>Jalankan</h3>
+    <div class="codeblock">
+      <div class="codeblock-header">Terminal</div>
+      <pre><code>node send.js
+
+# Output:
+# Pesan terkirim! ID: wamid.HBgNNjI4...</code></pre>
+    </div>
+  </section>
+
+  <!-- 8 -->
+  <section id="token-permanen" class="section">
+    <h2><span class="num">8</span> Buat token permanen</h2>
+    <p class="lead">Token dari dashboard hanya berlaku 24 jam. Untuk production, buat System User Token.</p>
+
+    <div class="steps">
+      <div class="step-item">
+        <h4>Buat System User</h4>
+        <p>Buka <a href="https://business.facebook.com/settings/system-users" target="_blank">Business Settings &rarr; System Users</a>. Klik Add, beri nama <code>wa-bot</code>, role Admin.</p>
+      </div>
+      <div class="step-item">
+        <h4>Assign asset</h4>
+        <p>Klik user &rarr; Add Assets &rarr; pilih tab Apps &rarr; centang app WA kamu &rarr; Full Control &rarr; Save.</p>
+      </div>
+      <div class="step-item">
+        <h4>Generate token</h4>
+        <p>Klik Generate New Token &rarr; pilih app &rarr; centang <code>whatsapp_business_messaging</code> dan <code>whatsapp_business_management</code> &rarr; Generate Token.</p>
+        <p>Copy token yang muncul dan simpan di file <code>.env</code>. Token ini tidak expire.</p>
+      </div>
+    </div>
+
+    <div class="callout callout-danger">
+      <strong>Penting</strong>
+      Token ini seperti password. Jangan commit ke GitHub. Masukkan <code>.env</code> ke <code>.gitignore</code>.
+    </div>
+  </section>
+
+  <!-- 9 -->
+  <section id="errors" class="section">
+    <h2><span class="num">9</span> Troubleshooting</h2>
+    <p class="lead">Error umum dan cara mengatasinya.</p>
+
+    <table>
+      <thead><tr><th>Error</th><th>Penyebab</th><th>Solusi</th></tr></thead>
+      <tbody>
+        <tr><td><code>Recipient not in allowed list</code></td><td>Nomor belum terdaftar</td><td>Tambahkan di API Setup</td></tr>
+        <tr><td><code>Template not found</code></td><td>Template belum approve</td><td>Cek status di Message Templates</td></tr>
+        <tr><td><code>Access token expired</code></td><td>Token 24 jam habis</td><td>Buat permanent token (Step 8)</td></tr>
+        <tr><td><code>Invalid parameter</code></td><td>Format nomor salah</td><td>Pakai <code>628xxx</code></td></tr>
+        <tr><td><code>Message undeliverable</code></td><td>Nomor tidak punya WA</td><td>Pastikan nomor aktif</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- Checklist -->
+  <section class="section">
+    <h2>Checklist</h2>
+    <ul class="checklist">
+      <li>Daftar di developers.facebook.com</li>
+      <li>Buat App dan tambahkan WhatsApp product</li>
+      <li>Catat Phone Number ID dan Access Token</li>
+      <li>Daftarkan nomor penerima (test mode)</li>
+      <li>Test kirim pesan via Dashboard atau cURL</li>
+      <li>Buat project Node.js dan jalankan send.js</li>
+      <li>Buat permanent token untuk production</li>
+    </ul>
+  </section>
+
+  <!-- Links -->
+  <section class="section">
+    <h2>Referensi</h2>
+    <ul>
+      <li><a href="https://developers.facebook.com/docs/whatsapp/cloud-api" target="_blank">Cloud API Documentation</a></li>
+      <li><a href="https://developers.facebook.com/docs/whatsapp/cloud-api/reference" target="_blank">API Reference</a></li>
+      <li><a href="https://developers.facebook.com/docs/whatsapp/pricing" target="_blank">Pricing</a></li>
+    </ul>
+  </section>
+
+</main>
+
+<footer>
+  <div class="container">
+    <p>WhatsApp Business API Tutorial &middot; Juli 2026 &middot; API v21.0</p>
+  </div>
+</footer>
+
 </body>
 </html>
