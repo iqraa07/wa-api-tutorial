@@ -30,6 +30,7 @@
     <li><a href="#nodejs">Kirim pesan via Node.js</a></li>
     <li><a href="#token-permanen">Buat token yang tidak expire</a></li>
     <li><a href="#errors">Troubleshooting</a></li>
+    <li><a href="#zabbix">Opsional: integrasi dengan Zabbix</a></li>
   </ol>
 </div></nav>
 
@@ -365,6 +366,153 @@ kirim('6281234567890', 'hello_world');</code></pre>
       <tr><td><code>Message undeliverable</code></td><td>Nomor tujuan tidak terdaftar di WhatsApp</td><td>Pastikan nomor tersebut aktif di WhatsApp</td></tr>
     </tbody>
   </table>
+</section>
+
+<section id="zabbix" class="section">
+  <h2><span class="num">12</span> Opsional: integrasi dengan Zabbix</h2>
+  <p class="lead">Jika kamu menggunakan Zabbix untuk monitoring server, berikut cara menghubungkan alert Zabbix ke WhatsApp Business API. Section ini bersifat opsional.</p>
+
+  <h3>Yang perlu disiapkan</h3>
+  <p>Sebelum integrasi, pastikan kamu sudah punya nilai-nilai berikut dari langkah sebelumnya:</p>
+  <table>
+    <thead><tr><th>Credential</th><th>Dari mana</th><th>Contoh nilai</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Phone Number ID</strong></td><td>Dashboard Meta &rarr; API Setup (Step 5)</td><td><code>123456789012345</code></td></tr>
+      <tr><td><strong>Access Token (permanen)</strong></td><td>System User Token (Step 10)</td><td><code>EAAGk0B3aZC...xxx</code></td></tr>
+      <tr><td><strong>Nama template</strong></td><td>Message Templates (Step 7)</td><td><code>server_alert</code></td></tr>
+      <tr><td><strong>Nomor penerima</strong></td><td>Nomor WA tim NOC/admin</td><td><code>6281234567890</code></td></tr>
+    </tbody>
+  </table>
+
+  <h3>Cara kerja integrasi</h3>
+  <p>Alurnya sederhana: Zabbix mendeteksi masalah pada server, lalu memanggil script yang mengirim pesan WhatsApp ke tim terkait melalui Meta Cloud API. Berikut diagram alurnya:</p>
+  <ol>
+    <li>Zabbix Server mendeteksi problem (misal: CPU usage tinggi, disk penuh, service down)</li>
+    <li>Zabbix menjalankan script alert yang sudah dikonfigurasi sebagai Media Type</li>
+    <li>Script tersebut memanggil Meta Cloud API dengan credentials yang sudah disimpan</li>
+    <li>Meta mengirimkan pesan template ke nomor penerima via WhatsApp</li>
+    <li>Tim menerima notifikasi di HP masing-masing</li>
+  </ol>
+
+  <h3>File konfigurasi di server</h3>
+  <p>Buat file <code>.env</code> di server tempat script berjalan. File ini berisi semua credentials yang dibutuhkan:</p>
+  <div class="codeblock"><div class="codeblock-header">.env (di server monitoring)</div>
+    <pre><code># WhatsApp Business API
+WA_PHONE_NUMBER_ID=123456789012345
+WA_ACCESS_TOKEN=EAAGk0B3aZCxxxxx
+WA_API_VERSION=v21.0
+
+# Template yang sudah di-approve
+WA_TEMPLATE_ALERT=server_alert
+WA_TEMPLATE_RESOLVED=server_resolved
+
+# Nomor penerima (pisah koma jika lebih dari satu)
+WA_RECIPIENTS=6281234567890,6289876543210</code></pre>
+  </div>
+
+  <h3>Script integrasi</h3>
+  <p>Buat file bernama <code>zabbix-wa.js</code> yang akan dipanggil oleh Zabbix setiap kali ada alert:</p>
+  <div class="codeblock"><div class="codeblock-header">zabbix-wa.js</div>
+    <pre><code>require('dotenv').config();
+const https = require('https');
+
+const PHONE_ID = process.env.WA_PHONE_NUMBER_ID;
+const TOKEN = process.env.WA_ACCESS_TOKEN;
+const VERSION = process.env.WA_API_VERSION || 'v21.0';
+
+function kirimTemplate(nomor, template, params, lang) {
+  return new Promise((resolve, reject) =&gt; {
+    const body = JSON.stringify({
+      messaging_product: 'whatsapp',
+      to: nomor,
+      type: 'template',
+      template: {
+        name: template,
+        language: { code: lang || 'id' },
+        components: params.length ? [{
+          type: 'body',
+          parameters: params.map(p =&gt; ({ type: 'text', text: String(p) }))
+        }] : []
+      }
+    });
+    const req = https.request({
+      hostname: 'graph.facebook.com',
+      path: '/' + VERSION + '/' + PHONE_ID + '/messages',
+      method: 'POST',
+      headers: {
+        'Authorization': 'Bearer ' + TOKEN,
+        'Content-Type': 'application/json'
+      }
+    }, res =&gt; {
+      let data = '';
+      res.on('data', c =&gt; data += c);
+      res.on('end', () =&gt; {
+        const json = JSON.parse(data);
+        if (res.statusCode === 200) resolve(json);
+        else reject(new Error(json.error?.message));
+      });
+    });
+    req.on('error', reject);
+    req.write(body);
+    req.end();
+  });
+}
+
+// Argumen dari Zabbix: node zabbix-wa.js "PROBLEM" "hostname" "problem desc" "severity"
+const [,, status, host, problem, severity] = process.argv;
+const recipients = (process.env.WA_RECIPIENTS || '').split(',').filter(Boolean);
+const waktu = new Date().toLocaleString('id-ID');
+
+(async () =&gt; {
+  const template = status === 'OK'
+    ? process.env.WA_TEMPLATE_RESOLVED
+    : process.env.WA_TEMPLATE_ALERT;
+  const params = status === 'OK'
+    ? [host, problem, waktu]
+    : [severity || 'WARNING', host, problem, 'Level ' + (severity || '3'), waktu];
+
+  for (const nomor of recipients) {
+    try {
+      await kirimTemplate(nomor.trim(), template, params);
+      console.log('Terkirim ke ' + nomor.trim());
+    } catch (e) {
+      console.error('Gagal ke ' + nomor.trim() + ': ' + e.message);
+    }
+  }
+})();</code></pre>
+  </div>
+
+  <h3>Konfigurasi di Zabbix</h3>
+  <p>Setelah script siap, hubungkan ke Zabbix:</p>
+  <ol>
+    <li>Buka Zabbix web interface</li>
+    <li>Masuk ke <strong>Administration</strong> &rarr; <strong>Media Types</strong></li>
+    <li>Klik <strong>Create Media Type</strong></li>
+    <li>Isi:
+      <ul>
+        <li>Name: <code>WhatsApp Business API</code></li>
+        <li>Type: <strong>Script</strong></li>
+        <li>Script name: <code>zabbix-wa.sh</code> (wrapper yang memanggil node)</li>
+        <li>Script parameters: <code>{ALERT.STATUS}</code>, <code>{HOST.NAME}</code>, <code>{ALERT.MESSAGE}</code>, <code>{EVENT.SEVERITY}</code></li>
+      </ul>
+    </li>
+    <li>Buat file wrapper <code>/usr/lib/zabbix/alertscripts/zabbix-wa.sh</code>:</li>
+  </ol>
+  <div class="codeblock"><div class="codeblock-header">zabbix-wa.sh</div>
+    <pre><code>#!/bin/bash
+cd /path/to/project
+node zabbix-wa.js "$1" "$2" "$3" "$4"</code></pre>
+  </div>
+  <ol start="6">
+    <li>Beri permission: <code>chmod +x /usr/lib/zabbix/alertscripts/zabbix-wa.sh</code></li>
+    <li>Di menu <strong>Users</strong>, tambahkan Media Type "WhatsApp Business API" ke user admin</li>
+    <li>Buat Action di <strong>Configuration</strong> &rarr; <strong>Actions</strong> untuk trigger notifikasi saat problem terjadi</li>
+  </ol>
+
+  <div class="callout callout-info">
+    <strong>Ringkasan credential yang perlu dicopy</strong>
+    Hanya ada 4 nilai yang perlu disalin ke file .env di server: Phone Number ID, Access Token permanen, nama template, dan nomor penerima. Semua nilai ini didapat dari langkah-langkah sebelumnya di tutorial ini.
+  </div>
 </section>
 
 <section class="section">
